@@ -12,7 +12,7 @@
 
 > The demo runs on a free CPU tier, so it may take a minute to wake from sleep, and each video takes a few minutes to render.
 
-![Reelforge web app](docs/screenshot.png)
+![Reelforge web app](screenshot.png)
 
 ---
 
@@ -53,7 +53,7 @@ The pipeline runs in five stages, each handled by its own module so they're easy
 ### 1. Install
 
 ```bash
-git clone https://github.com/ShohagMia/reelforge.git
+git clone https://github.com/MdShohag07/AI-Video-Pipeline.git
 cd reelforge
 pip install -r requirements.txt
 ```
