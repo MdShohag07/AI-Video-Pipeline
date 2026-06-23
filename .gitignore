@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+venv/
+.env
+.vscode/
+output/
+workdir/
+test_images/
+*.mp3
+*.mp4
+*.jpg
+*.png
+*.srt
+*.ass
