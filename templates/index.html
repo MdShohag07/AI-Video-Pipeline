@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reelforge — topic in, short out</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#141021;
+    --bg-2:#19142b;
+    --surface:#1f1934;
+    --surface-2:#261f40;
+    --line:#322a52;
+    --line-soft:#2a2444;
+    --text:#f4f1fb;
+    --muted:#a097c2;
+    --muted-2:#766d99;
+    --coral:#ff6a5c;
+    --amber:#ffc24b;
+    --good:#54e0b0;
+    --bad:#ff708a;
+    --grad:linear-gradient(120deg,var(--coral),var(--amber));
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:
+      radial-gradient(900px 600px at 88% -8%, rgba(255,106,92,.16), transparent 60%),
+      radial-gradient(800px 620px at 6% 108%, rgba(255,194,75,.10), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:Inter,system-ui,sans-serif;
+    line-height:1.55;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:34px 28px 64px}
+
+  /* ---- masthead ---- */
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:46px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:600;letter-spacing:.2px}
+  .mark{width:26px;height:26px;border-radius:8px;background:var(--grad);
+    box-shadow:0 6px 20px -6px rgba(255,120,80,.7);position:relative;flex:none}
+  .mark::after{content:"";position:absolute;inset:0;margin:auto;width:0;height:0;
+    border-left:7px solid #1a1430;border-top:5px solid transparent;border-bottom:5px solid transparent;
+    transform:translateX(1px)}
+  .brand b{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:18px}
+  .tag-pill{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);
+    border:1px solid var(--line);padding:5px 11px;border-radius:999px;letter-spacing:.3px}
+
+  /* ---- hero copy ---- */
+  .hero{margin-bottom:30px;max-width:680px}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:2.5px;
+    text-transform:uppercase;color:var(--coral);margin:0 0 14px}
+  h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:clamp(34px,5.4vw,56px);line-height:1.02;letter-spacing:-.02em;margin:0 0 14px}
+  h1 .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--muted);font-size:16px;margin:0;max-width:520px}
+
+  /* ---- main grid ---- */
+  .grid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:30px;align-items:start}
+  @media(max-width:760px){.grid{grid-template-columns:1fr;gap:24px}}
+
+  /* ---- phone canvas (the signature element) ---- */
+  .stage{justify-self:center;width:100%;max-width:300px}
+  .phone{position:relative;width:100%;aspect-ratio:9/16;border-radius:26px;
+    background:linear-gradient(180deg,#171125,#120d1f);
+    border:1px solid var(--line);padding:10px;
+    box-shadow:0 40px 80px -40px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.04)}
+  .screen{position:relative;width:100%;height:100%;border-radius:18px;overflow:hidden;
+    background:radial-gradient(120% 90% at 50% 0%, #221a3a, #140f25);
+    display:flex;align-items:center;justify-content:center;text-align:center}
+  .screen video{width:100%;height:100%;object-fit:cover;display:block}
+  .ratio-tag{position:absolute;top:12px;left:12px;font-family:"JetBrains Mono",monospace;
+    font-size:10px;color:var(--muted-2);border:1px solid var(--line-soft);
+    padding:3px 7px;border-radius:6px;letter-spacing:.5px;z-index:3}
+
+  /* idle state */
+  .idle{padding:30px 22px;color:var(--muted-2)}
+  .idle .glyph{width:46px;height:46px;margin:0 auto 16px;border-radius:13px;
+    border:1px dashed var(--line);display:flex;align-items:center;justify-content:center}
+  .idle .glyph::after{content:"";width:0;height:0;border-left:13px solid var(--muted-2);
+    border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:3px}
+  .idle p{margin:0;font-size:13.5px;line-height:1.45}
+
+  /* working state */
+  .working{padding:26px 22px;width:100%}
+  .working .num{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:13px;color:var(--amber);letter-spacing:2px;margin-bottom:8px}
+  .working .what{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;
+    font-size:19px;line-height:1.2;color:var(--text);margin-bottom:6px}
+  .working .detail{font-family:"JetBrains Mono",monospace;font-size:11px;
+    color:var(--muted-2);min-height:14px;margin-bottom:22px}
+  .bar{height:5px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:99px;background:var(--grad);width:30%;
+    animation:slide 1.25s ease-in-out infinite}
+  @keyframes slide{0%{margin-left:-32%}100%{margin-left:102%}}
+
+  /* error state */
+  .errstate{padding:28px 24px;color:var(--bad)}
+  .errstate .big{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:18px;margin-bottom:8px;color:var(--text)}
+  .errstate p{margin:0;font-size:12.5px;line-height:1.5;color:var(--muted);
+    font-family:"JetBrains Mono",monospace;word-break:break-word}
+
+  /* ---- controls column ---- */
+  .panel{background:linear-gradient(180deg,var(--surface),var(--bg-2));
+    border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  label.field-label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:9px}
+  .input-row{display:flex;gap:10px}
+  @media(max-width:420px){.input-row{flex-direction:column}}
+  input[type=text]{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);
+    border-radius:12px;padding:13px 15px;color:var(--text);font-family:Inter,sans-serif;
+    font-size:15px;transition:border-color .15s, box-shadow .15s}
+  input[type=text]::placeholder{color:var(--muted-2)}
+  input[type=text]:focus{outline:none;border-color:var(--coral);
+    box-shadow:0 0 0 3px rgba(255,106,92,.18)}
+  button{font-family:Inter,sans-serif;cursor:pointer;border:none}
+  .go{background:var(--grad);color:#1a1126;font-weight:700;font-size:15px;
+    padding:13px 20px;border-radius:12px;white-space:nowrap;
+    box-shadow:0 10px 26px -10px rgba(255,140,70,.75);transition:transform .12s, filter .15s, opacity .15s}
+  .go:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.05)}
+  .go:active:not(:disabled){transform:translateY(0)}
+  .go:disabled{cursor:not-allowed;opacity:.55;box-shadow:none}
+
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+  .chip{font-size:12.5px;color:var(--muted);background:var(--surface-2);
+    border:1px solid var(--line-soft);padding:6px 11px;border-radius:999px;cursor:pointer;
+    transition:color .15s,border-color .15s}
+  .chip:hover{color:var(--text);border-color:var(--coral)}
+
+  /* pipeline list */
+  .pipe{margin-top:22px;border-top:1px solid var(--line-soft);padding-top:18px}
+  .pipe h3{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:2px;
+    text-transform:uppercase;color:var(--muted-2);margin:0 0 14px;font-weight:500}
+  .step{display:flex;align-items:center;gap:13px;padding:7px 0}
+  .step .idx{font-family:"JetBrains Mono",monospace;font-size:12px;width:22px;flex:none;
+    color:var(--muted-2);transition:color .2s}
+  .step .name{font-size:14px;color:var(--muted-2);transition:color .2s;flex:1}
+  .step .state{width:18px;height:18px;flex:none;border-radius:50%;border:1.5px solid var(--line);
+    position:relative;transition:all .2s}
+  .step.active .idx,.step.active .name{color:var(--text)}
+  .step.active .name{font-weight:600}
+  .step.active .state{border-color:var(--amber)}
+  .step.active .state::after{content:"";position:absolute;inset:3px;border-radius:50%;
+    background:var(--amber);animation:pulse 1s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+  .step.done .idx{color:var(--good)}
+  .step.done .name{color:var(--text)}
+  .step.done .state{border-color:var(--good);background:var(--good)}
+  .step.done .state::after{content:"";position:absolute;left:5px;top:2px;width:4px;height:8px;
+    border:solid #11241c;border-width:0 2px 2px 0;transform:rotate(45deg)}
+
+  /* result actions */
+  .done-actions{margin-top:20px;display:none;gap:10px;flex-wrap:wrap}
+  .done-actions.show{display:flex}
+  .download{display:inline-flex;align-items:center;gap:9px;background:var(--surface-2);
+    color:var(--text);border:1px solid var(--line);font-weight:600;font-size:14.5px;
+    padding:12px 18px;border-radius:12px;text-decoration:none;transition:border-color .15s, transform .12s}
+  .download:hover{border-color:var(--coral);transform:translateY(-1px)}
+  .download svg{width:17px;height:17px}
+  .restart{background:transparent;color:var(--muted);border:1px solid var(--line);
+    padding:12px 16px;border-radius:12px;font-size:14px;font-weight:500;transition:color .15s,border-color .15s}
+  .restart:hover{color:var(--text);border-color:var(--muted)}
+
+  footer{margin-top:46px;color:var(--muted-2);font-size:12.5px;font-family:"JetBrains Mono",monospace;
+    border-top:1px solid var(--line-soft);padding-top:18px;line-height:1.6}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand"><span class="mark"></span><b>Reelforge</b></div>
+      <span class="tag-pill">script · voice · scenes · cut</span>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">faceless video pipeline</p>
+      <h1>One topic in,<br><span class="accent">one finished short</span> out.</h1>
+      <p>Type what the video is about. Reelforge writes the script, voices it, pulls matching scenes, scores it, and burns in captions — then hands you a vertical clip ready for Reels, Shorts, or TikTok.</p>
+    </section>
+
+    <div class="grid">
+      <!-- phone canvas -->
+      <div class="stage">
+        <div class="phone">
+          <div class="screen" id="screen">
+            <span class="ratio-tag">9:16</span>
+            <div class="idle" id="idleState">
+              <div class="glyph"></div>
+              <p>Your short will play here<br>once it's built.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- controls -->
+      <div class="panel">
+        <label class="field-label" for="topic">What's the video about?</label>
+        <div class="input-row">
+          <input id="topic" type="text" autocomplete="off"
+                 placeholder="3 AI tools that actually save you time" />
+          <button class="go" id="goBtn">Generate video</button>
+        </div>
+
+        <div class="chips" id="chips">
+          <span class="chip">why your phone battery dies so fast</span>
+          <span class="chip">the truth about 8 glasses of water</span>
+          <span class="chip">how rickshaws took over Dhaka</span>
+        </div>
+
+        <div class="pipe">
+          <h3>Pipeline</h3>
+          <div id="steps"></div>
+        </div>
+
+        <div class="done-actions" id="doneActions">
+          <a class="download" id="downloadBtn" href="#" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/>
+            </svg>
+            Download .mp4
+          </a>
+          <button class="restart" id="restartBtn">Make another</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Runs your local pipeline · every step free · output saved to /output
+    </footer>
+  </div>
+
+<script>
+const STAGE_LABELS = [
+  "Script", "Voiceover", "Scenes", "Ambience", "Assemble"
+];
+
+const screen      = document.getElementById("screen");
+const idleState   = document.getElementById("idleState");
+const stepsEl     = document.getElementById("steps");
+const topicEl     = document.getElementById("topic");
+const goBtn       = document.getElementById("goBtn");
+const doneActions = document.getElementById("doneActions");
+const downloadBtn = document.getElementById("downloadBtn");
+const restartBtn  = document.getElementById("restartBtn");
+
+let polling = null;
+
+// build the static pipeline checklist once
+function renderSteps(activeStep, status){
+  stepsEl.innerHTML = "";
+  STAGE_LABELS.forEach((label, i) => {
+    const n = i + 1;
+    const row = document.createElement("div");
+    row.className = "step";
+    if (status === "done")        row.classList.add("done");
+    else if (n < activeStep)      row.classList.add("done");
+    else if (n === activeStep)    row.classList.add("active");
+    row.innerHTML =
+      `<span class="idx">${String(n).padStart(2,"0")}</span>
+       <span class="name">${label}</span>
+       <span class="state"></span>`;
+    stepsEl.appendChild(row);
+  });
+}
+renderSteps(0, "idle");
+
+function showWorking(step, label, detail){
+  idleState?.remove();
+  screen.querySelector(".working, .errstate, video")?.remove();
+  const num = String(Math.min(step,5)).padStart(2,"0");
+  const w = document.createElement("div");
+  w.className = "working";
+  w.innerHTML =
+    `<div class="num">STEP ${num} / 05</div>
+     <div class="what">${label || "Working…"}</div>
+     <div class="detail">${detail || ""}</div>
+     <div class="bar"><i></i></div>`;
+  screen.appendChild(w);
+}
+
+function showError(msg){
+  screen.querySelector(".working, .idle, video")?.remove();
+  const e = document.createElement("div");
+  e.className = "errstate";
+  e.innerHTML = `<div class="big">That run didn't finish</div><p>${msg}</p>`;
+  screen.appendChild(e);
+}
+
+function showVideo(url){
+  screen.querySelector(".working, .idle, .errstate")?.remove();
+  const v = document.createElement("video");
+  v.src = url; v.controls = true; v.autoplay = true;
+  v.muted = true; v.loop = true; v.playsInline = true;
+  screen.appendChild(v);
+}
+
+function setBusy(busy){
+  goBtn.disabled = busy;
+  topicEl.disabled = busy;
+  goBtn.textContent = busy ? "Generating…" : "Generate video";
+}
+
+async function start(){
+  const topic = topicEl.value.trim();
+  if(!topic){ topicEl.focus(); return; }
+
+  doneActions.classList.remove("show");
+  setBusy(true);
+  renderSteps(1, "running");
+  showWorking(1, "Writing the script", "");
+
+  let job;
+  try{
+    const res = await fetch("/generate", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({topic})
+    });
+    job = await res.json();
+    if(!res.ok){ throw new Error(job.error || "Couldn't start the run."); }
+  }catch(err){
+    showError(err.message); setBusy(false); return;
+  }
+
+  poll(job.job_id);
+}
+
+function poll(jobId){
+  clearInterval(polling);
+  polling = setInterval(async () => {
+    let s;
+    try{
+      const res = await fetch("/status/" + jobId);
+      s = await res.json();
+    }catch{ return; } // transient; try again next tick
+
+    if(s.status === "error"){
+      clearInterval(polling);
+      showError(s.error || "Something failed mid-run.");
+      setBusy(false);
+      return;
+    }
+
+    if(s.status === "done"){
+      clearInterval(polling);
+      renderSteps(0, "done");
+      showVideo(s.video_url);
+      downloadBtn.href = s.video_url + "?download=1";
+      doneActions.classList.add("show");
+      setBusy(false);
+      return;
+    }
+
+    // running
+    renderSteps(s.step, "running");
+    showWorking(s.step, s.label, s.detail);
+  }, 1400);
+}
+
+function reset(){
+  clearInterval(polling);
+  setBusy(false);
+  doneActions.classList.remove("show");
+  screen.querySelector(".working, .errstate, video")?.remove();
+  if(!screen.querySelector(".idle")){
+    const d = document.createElement("div");
+    d.className = "idle";
+    d.innerHTML = `<div class="glyph"></div><p>Your short will play here<br>once it's built.</p>`;
+    screen.appendChild(d);
+  }
+  renderSteps(0, "idle");
+  topicEl.focus();
+}
+
+goBtn.addEventListener("click", start);
+topicEl.addEventListener("keydown", e => { if(e.key === "Enter") start(); });
+restartBtn.addEventListener("click", reset);
+document.getElementById("chips").addEventListener("click", e => {
+  if(e.target.classList.contains("chip")){ topicEl.value = e.target.textContent; topicEl.focus(); }
+});
+</script>
+</body>
+</html>
