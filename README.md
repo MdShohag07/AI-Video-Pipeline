@@ -1,4 +1,4 @@
-# 🎬 Reelforge — AI Video Pipeline
+# 🎬 Reelforge - AI Video Pipeline
 
 > Type a topic. Get a finished, captioned, vertical video ready to upload to Reels, Shorts, or TikTok. Every step is free.
 
